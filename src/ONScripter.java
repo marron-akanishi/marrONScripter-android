@@ -612,7 +612,7 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                              WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-		 /*if (Build.VERSION.SDK_INT >= 19) {
+		 if (Build.VERSION.SDK_INT >= 19) {
             		Window window = getWindow();
             		View view = window.getDecorView();
             		view.setSystemUiVisibility(
@@ -622,7 +622,7 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
         }
 
 		// display overflowbutton
-		setLegacyOverflow(getWindow(), true);*/
+		setLegacyOverflow(getWindow(), true);
 
 		gCurrentDirectoryPath = Environment.getExternalStorageDirectory() + "/Android/data/" + getApplicationContext().getPackageName();
 		alertDialogBuilder = new AlertDialog.Builder(this);
@@ -756,14 +756,14 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
 		if( wakeLock != null && !wakeLock.isHeld() )
 			wakeLock.acquire();
 		super.onResume();
-        /*if (Build.VERSION.SDK_INT >= 19) {
+ 		if (Build.VERSION.SDK_INT >= 19) {
             		Window window = getWindow();
             		View view = window.getDecorView();
             		view.setSystemUiVisibility(
                             View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
                     		View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                     		View.SYSTEM_UI_FLAG_FULLSCREEN);
-        }*/
+        }
 		if( mGLView != null )
 			mGLView.onResume();
 		if( mAudioThread != null )
