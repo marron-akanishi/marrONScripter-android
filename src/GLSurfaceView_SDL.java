@@ -33,6 +33,8 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.opengl.EGL14;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;

@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.media.AudioManager;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 class DemoRenderer extends GLSurfaceView_SDL.Renderer {
@@ -98,12 +99,18 @@ class DemoGLSurfaceView extends GLSurfaceView_SDL {
 	{
 		// TODO: add multitouch support (added in Android 2.0 SDK)
 		int action = -1;
-		if( event.getAction() == MotionEvent.ACTION_DOWN )
-			action = 0;
-		if( event.getAction() == MotionEvent.ACTION_UP )
-			action = 1;
-		if( event.getAction() == MotionEvent.ACTION_MOVE )
-			action = 2;
+        if(event.getPointerCount() == 1){
+            if( event.getAction() == MotionEvent.ACTION_DOWN )
+                action = 0;
+            if( event.getAction() == MotionEvent.ACTION_UP )
+                action = 1;
+            if( event.getAction() == MotionEvent.ACTION_MOVE )
+                action = 2;
+        }else{
+            action = -1;
+            onKeyDown(KeyEvent.KEYCODE_MENU,new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MENU));
+            onKeyUp(KeyEvent.KEYCODE_MENU,new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MENU));
+        }
 		if ( action >= 0 )
 			nativeMouse( (int)event.getX(), (int)event.getY(), action );
 
@@ -163,6 +170,7 @@ class DemoGLSurfaceView extends GLSurfaceView_SDL {
 	@Override
 	public void onStop()
 	{
+        //nativeKey( 0, 3 ); // send SDL_ACTIVEEVENT
 		super.onStop();
 	}
 

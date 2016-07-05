@@ -47,8 +47,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 import android.util.Log;
 import android.net.Uri;
+import android.content.res.Configuration;
 
 import android.provider.Settings.Secure;
 import com.google.android.vending.licensing.AESObfuscator;
@@ -80,6 +82,7 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
 	private boolean mIsLandscape = true;
 	private boolean mButtonVisible = true;
     private SubMenu sm;
+    private int mPointerID1, mPointerID2; // ポインタID記憶用
 
     static class FileSort implements Comparator<File>{
         public int compare(File src, File target){
@@ -652,9 +655,11 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
 
         	} catch (NoSuchFieldException e) {
             		// 2.3以下はフラグなし
+                //Toast.makeText(this, "NoSuchFieldException", Toast.LENGTH_LONG).show();
                 return;
         	} catch (IllegalAccessException e) {
             		// 使えなくなった...
+                //Toast.makeText(this, "IllegalAccessException", Toast.LENGTH_LONG).show();
                 return;
         	}
     }
@@ -664,18 +669,16 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
     {
         super.onCreateOptionsMenu(menu);
         
-        if (mGLView != null){
-            menu.add(0, Menu.FIRST,   0, getResources().getString(R.string.menu_automode));
-            menu.add(0, Menu.FIRST+1, 0, getResources().getString(R.string.menu_skip));
-            menu.add(0, Menu.FIRST+2, 0, getResources().getString(R.string.menu_speed));
-            
-            sm = menu.addSubMenu(getResources().getString(R.string.menu_settings));
-            sm.add(1, Menu.FIRST+3, 0, getResources().getString(R.string.menu_hide_buttons));
-            sm.add(2, Menu.FIRST+3, 0, getResources().getString(R.string.menu_show_buttons));
-            sm.add(0, Menu.FIRST+5, 0, getResources().getString(R.string.menu_version));
-            
-            menu.add(0, Menu.FIRST+6, 0, getResources().getString(R.string.menu_quit));
-        }
+        menu.add(0, Menu.FIRST,   0, getResources().getString(R.string.menu_automode));
+        menu.add(0, Menu.FIRST+1, 0, getResources().getString(R.string.menu_skip));
+        menu.add(0, Menu.FIRST+2, 0, getResources().getString(R.string.menu_speed));
+        
+        sm = menu.addSubMenu(getResources().getString(R.string.menu_settings));
+        sm.add(1, Menu.FIRST+3, 0, getResources().getString(R.string.menu_hide_buttons));
+        sm.add(2, Menu.FIRST+3, 0, getResources().getString(R.string.menu_show_buttons));
+        sm.add(0, Menu.FIRST+5, 0, getResources().getString(R.string.menu_version));
+        
+        menu.add(0, Menu.FIRST+6, 0, getResources().getString(R.string.menu_quit));
         
         return true;
     }
@@ -747,7 +750,7 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
 		if( mGLView != null )
 			mGLView.onPause();
 		if( mAudioThread != null )
-			mAudioThread.onPause();
+            mAudioThread.onPause();
 	}
 
 	@Override
@@ -764,7 +767,7 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
                     		View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                     		View.SYSTEM_UI_FLAG_FULLSCREEN);
         }
-		if( mGLView != null )
+        if( mGLView != null )
 			mGLView.onResume();
 		if( mAudioThread != null )
 			mAudioThread.onResume();
@@ -773,9 +776,9 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
 	@Override
 	protected void onStop()
 	{
-		super.onStop();
-		if( mGLView != null )
-			mGLView.onStop();
+        super.onStop();
+        if( mGLView != null )
+            mGLView.onStop();
 	}
 
 	@Override
@@ -787,7 +790,12 @@ public class ONScripter extends Activity implements AdapterView.OnItemClickListe
 			mChecker.onDestroy();
 		super.onDestroy();
 	}
-
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+    }
+    
 	final Handler handler = new Handler(){
 		public void handleMessage(Message msg){
 			int current = msg.getData().getInt("current");
